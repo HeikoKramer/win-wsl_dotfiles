@@ -1,0 +1,91 @@
+# Each line = one shortcut
+# name: Display name / alias
+# cat:  Category (COMMANDS, DIRS, NOTES, CONFIG)
+# desc: 2–4 words description
+# cmd:  OS-specific commands (win/linux) or "both"
+
+# ==== EDIT / CONFIG ====
+
+- name: short
+  cat: CONFIG
+  desc: shortcuts.yml edit
+  cmd:
+    win:  'Edit-File "E:\Configs\dotfiles\common\shortcuts.yml"'
+
+- name: pro
+  cat: CONFIG
+  desc: PS profile (tmpl) edit
+  cmd:
+    win:  '$p=(chezmoi source-path $PROFILE); Edit-File $p'
+
+- name: fresh
+  cat: CONFIG
+  desc: Profile reload
+  cmd:
+    win:  '. $PROFILE'
+
+- name: chez
+  cat: CONFIG
+  desc: chezmoi apply
+  cmd:
+    both: 'chezmoi apply -v'
+
+- name: ts
+  cat: CONFIG
+  desc: Terminal Settings
+  cmd:
+    win:  '$a="$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"; $b="$env:LOCALAPPDATA\Microsoft\Windows Terminal\settings.json"; if(Test-Path $a){Edit-File $a}else{Edit-File $b}'
+
+- name: gitconf
+  cat: CONFIG
+  desc: .gitconfig edit
+  cmd:
+    win:  'Edit-File "$HOME\.gitconfig"'
+
+# ==== DIRECTORIES ====
+
+- name: sshdir
+  cat: DIRS
+  desc: SSH Keys
+  cmd:
+    win:  'cd "$HOME\.ssh"; ls'
+
+- name: down
+  cat: DIRS
+  desc: Open Downloads
+  cmd:
+    both: 'cd "$HOME/Downloads"; ls'
+
+- name: docs
+  cat: DIRS
+  desc: Open Documents
+  cmd:
+    both: 'cd "$HOME/Documents"; ls'
+
+- name: desk
+  cat: DIRS
+  desc: Open Desktop
+  cmd:
+    both: 'cd "$HOME/Desktop"; ls'
+
+- name: projects
+  cat: DIRS
+  desc: "Projects E:"
+  cmd:
+    win:   'cd "E:\Projects"; ls'
+    linux: 'cd "/mnt/e/Projects"; ls'
+
+- name: dot
+  cat: DIRS
+  desc: open dotfiles repo
+  cmd:
+    win:   'cd "$env:DOTFILES"; ls'
+    linux: 'cd "$DOTFILES"; ls'
+
+# ==== COMMANDS ====
+
+- name: gs
+  cat: COMMANDS
+  desc: git status
+  cmd:
+    both: 'git status'
