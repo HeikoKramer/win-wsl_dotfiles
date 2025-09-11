@@ -51,5 +51,42 @@ function shortcuts {
       | Format-Table -AutoSize
 }
 
+# --- Git helper: allg (add + status + commit + push) ---
+function allg {
+    param(
+        [string]$Message
+    )
+
+    if (-not (Test-Path ".git")) {
+        Write-Host "Not inside a Git repository."
+        return
+    }
+
+    git add -A
+    git status
+
+    if (-not $Message) {
+        $Message = Read-Host "Enter commit message"
+    }
+
+    if ([string]::IsNullOrWhiteSpace($Message)) {
+        Write-Host "Aborted: empty commit message."
+        return
+    }
+
+    git commit -m "$Message"
+
+    # get current branch
+    $branch = git rev-parse --abbrev-ref HEAD
+
+    # check if upstream exists 
+    $null = git rev-parse --symbolic-full-name --abbrev-ref '@{u}' 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        git push -u origin $branch
+    } else {
+        git push
+    }
+}
+
 try { Start-Service ssh-agent -ErrorAction SilentlyContinue | Out-Null } catch {}
 Write-Host "Profile geladen. 'shortcuts' listet alles, 'shortcuts DIRS' filtert."
