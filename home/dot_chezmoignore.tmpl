@@ -1,0 +1,4 @@
+# Ignore Windows-specific targets when NOT on Windows
+{{- if ne .chezmoi.os "windows" -}}
+Documents/PowerShell/
+{{- end -}}
