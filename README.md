@@ -53,18 +53,3 @@ Both commands understand the same categories used in the YAML files, so filterin
    function data.
 3. Open a new shell or run the `short` helper to review the rendered shortcuts.
 
-## Troubleshooting
-
-- **Bash helpers missing:** ensure chezmoi is installed and that
-  `dot_bashrc` is the active profile. The profile will attempt to render the
-  helper file on start-up and log an error if rendering fails.
-- **PowerShell shortcuts missing:** run `chezmoi apply` from PowerShell to
-  regenerate the profile, or use the `fresh` shortcut to reload it.
-
-## Conventions
-
-- Chat communication happens in German, but all code and comments remain in
-  English.
-- Prefer editing shared shortcuts in the YAML file so both shells stay in sync.
-- Keep scripts idempotent: running `chezmoi apply` multiple times should be safe
-  on both platforms.
