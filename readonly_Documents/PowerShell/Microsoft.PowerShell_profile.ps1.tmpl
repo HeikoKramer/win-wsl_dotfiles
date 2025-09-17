@@ -4,6 +4,24 @@ $ErrorActionPreference = "Stop"
 Set-Location $HOME
 if (-not $env:DOTFILES) { $env:DOTFILES = "E:\Configs\dotfiles" }
 
+if (-not $env:DOTFILES_PROFILE_AUTOUPDATED) {
+  $env:DOTFILES_PROFILE_AUTOUPDATED = '1'
+  if (Get-Command chezmoi -ErrorAction SilentlyContinue) {
+    try {
+      $updateOutput = chezmoi update 2>&1
+      if ($LASTEXITCODE -eq 0) {
+        if ($updateOutput) { Write-Verbose $updateOutput }
+        . $PROFILE
+        return
+      } else {
+        Write-Warning "chezmoi update failed:`n$updateOutput"
+      }
+    } catch {
+      Write-Warning "chezmoi update failed: $_"
+    }
+  }
+}
+
 # chezmoi environment-variable
 try { $env:CHEZMOI_SOURCE_DIR = (chezmoi source-path) } catch {}
 
@@ -89,4 +107,26 @@ function allg {
 }
 
 try { Start-Service ssh-agent -ErrorAction SilentlyContinue | Out-Null } catch {}
+
+function Show-DotfilesVersion {
+  $version = 'unknown'
+  $branch = $null
+
+  if ($env:DOTFILES -and (Test-Path (Join-Path $env:DOTFILES '.git'))) {
+    if (Get-Command git -ErrorAction SilentlyContinue) {
+      try {
+        $version = git -C $env:DOTFILES rev-parse --short HEAD 2>$null
+        $branch  = git -C $env:DOTFILES rev-parse --abbrev-ref HEAD 2>$null
+      } catch {}
+    }
+  }
+
+  if ($branch -and $branch -ne 'HEAD') {
+    $version = "$branch@$version"
+  }
+
+  Write-Host "Dotfiles version (Windows): $version"
+}
+
+Show-DotfilesVersion
 Write-Host "Profile loaded. 'shortcuts' lists everything, 'shortcuts DIRS' filters."
