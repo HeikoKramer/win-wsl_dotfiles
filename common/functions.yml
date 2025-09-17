@@ -1,0 +1,67 @@
+# Helper function definitions (see templates in home/ and readonly_Documents/)
+# Each entry: name, cat (category), desc, and optional linux/win bodies.
+# Bodies should be multi-line strings containing the function/scriptblock contents.
+
+- name: allg
+  cat: GIT
+  desc: Git add/status/commit/push helper
+  linux: |-
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      echo "Not inside a Git repository."
+      return 1
+    fi
+
+    git add -A
+    git status
+
+    local message="$1"
+    if [ -z "$message" ]; then
+      read -r -p "Enter commit message: " message
+    fi
+
+    if [ -z "$message" ]; then
+      echo "Aborted: empty commit message."
+      return 1
+    fi
+
+    git commit -m "$message" || return 1
+
+    local branch
+    branch="$(git rev-parse --abbrev-ref HEAD)"
+    if git rev-parse --symbolic-full-name --abbrev-ref '@{u}' >/dev/null 2>&1; then
+      git push
+    else
+      git push -u origin "$branch"
+    fi
+  win: |-
+    param(
+        [string]$Message
+    )
+
+    if (-not (Test-Path ".git")) {
+        Write-Host "Not inside a Git repository."
+        return
+    }
+
+    git add -A
+    git status
+
+    if (-not $Message) {
+        $Message = Read-Host "Enter commit message"
+    }
+
+    if ([string]::IsNullOrWhiteSpace($Message)) {
+        Write-Host "Aborted: empty commit message."
+        return
+    }
+
+    git commit -m "$Message"
+
+    $branch = git rev-parse --abbrev-ref HEAD
+
+    $null = git rev-parse --symbolic-full-name --abbrev-ref '@{u}' 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        git push -u origin $branch
+    } else {
+        git push
+    }
