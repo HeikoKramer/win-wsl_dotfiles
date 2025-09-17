@@ -130,6 +130,27 @@ fi
 export DOTFILES
 
 # Load generated helper functions (shortcuts, etc.)
+generate_shortcut_helpers() {
+  local template="$DOTFILES/home/dot_bash_functions.tmpl"
+  local output="$HOME/.bash_functions"
+
+  if [ ! -f "$template" ] || ! command -v chezmoi >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if [ ! -f "$output" ] || [ "$template" -nt "$output" ] || [ "$DOTFILES/common/shortcuts.yml" -nt "$output" ]; then
+    if chezmoi execute-template <"$template" >"$output"; then
+      chmod 600 "$output"
+    else
+      echo "Failed to render Bash shortcuts from template." >&2
+      return 1
+    fi
+  fi
+}
+
+generate_shortcut_helpers
+
+# Load the generated functions into the current shell
 if [ -f "$HOME/.bash_functions" ]; then
   # shellcheck disable=SC1090
   . "$HOME/.bash_functions"

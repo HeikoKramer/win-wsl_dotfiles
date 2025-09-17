@@ -1,0 +1,50 @@
+# Windows + WSL dotfiles
+
+This repository contains the configuration I use to keep my Windows 11 PowerShell
+profile and the Bash environment inside WSL2 in sync. The layout follows
+[chezmoi](https://www.chezmoi.io/) conventions so the same source files can be
+applied on both operating systems.
+
+## Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| `dot_bashrc` | Bash profile applied in WSL. Detects the dotfiles directory, renders helper functions, and sources shared shortcuts. |
+| `home/dot_bash_functions.tmpl` | chezmoi template that turns the shared shortcut definitions into Bash functions. |
+| `readonly_Documents/PowerShell/Microsoft.PowerShell_profile.ps1.tmpl` | PowerShell profile template. chezmoi renders the final `Microsoft.PowerShell_profile.ps1` on Windows. |
+| `common/shortcuts.yml` | Single source of truth for helper commands and directory shortcuts that are rendered for both shells. |
+
+## Installation
+
+1. Install chezmoi on both Windows (PowerShell) and WSL.
+2. Clone this repository and set the `DOTFILES` environment variable to the
+   checkout path (chezmoi does this automatically when you run `chezmoi init`).
+3. Apply the dotfiles with `chezmoi apply` from either shell. This renders the
+   PowerShell profile, Bash helper functions, and any other managed files.
+4. Open a new terminal session. Bash regenerates `~/.bash_functions` on demand
+   and automatically sources it, so the shortcut helpers are always available.
+
+## Adding new shortcuts or aliases
+
+1. Edit `common/shortcuts.yml` and add a new entry. Each shortcut supports a
+   `win`, `linux`, or `both` command. Provide an English description and keep
+   the category (`cat`) consistent with the existing entries.
+2. Run `chezmoi apply` to regenerate the derived files. The PowerShell profile
+   and Bash helper functions will be rebuilt using the updated shortcut data.
+3. Open a new shell or run the `short` helper to review the rendered shortcuts.
+
+## Troubleshooting
+
+- **Bash helpers missing:** ensure chezmoi is installed and that
+  `dot_bashrc` is the active profile. The profile will attempt to render the
+  helper file on start-up and log an error if rendering fails.
+- **PowerShell shortcuts missing:** run `chezmoi apply` from PowerShell to
+  regenerate the profile, or use the `fresh` shortcut to reload it.
+
+## Conventions
+
+- Chat communication happens in German, but all code and comments remain in
+  English.
+- Prefer editing shared shortcuts in the YAML file so both shells stay in sync.
+- Keep scripts idempotent: running `chezmoi apply` multiple times should be safe
+  on both platforms.
