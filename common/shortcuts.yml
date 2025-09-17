@@ -53,32 +53,35 @@
   desc: SSH Keys
   cmd:
     win:   'cd "$HOME\.ssh"; ls'
-    linux: 'cd "$HOME/.ssh"; ls'
+    linux: 'cd "$HOME/.ssh"; ls -la'
 
 - name: down
   cat: DIRS
   desc: Open Downloads
   cmd:
-    both: 'cd "$HOME/Downloads"; ls'
+    win:   'cd "$HOME/Downloads"; ls'
+    linux: 'cd "$HOME/Downloads"; ls -la'
 
 - name: docs
   cat: DIRS
   desc: Open Documents
   cmd:
-    both: 'cd "$HOME/Documents"; ls'
+    win:   'cd "$HOME/Documents"; ls'
+    linux: 'cd "$HOME/Documents"; ls -la'
 
 - name: desk
   cat: DIRS
   desc: Open Desktop
   cmd:
-    both: 'cd "$HOME/Desktop"; ls'
+    win:   'cd "$HOME/Desktop"; ls'
+    linux: 'cd "$HOME/Desktop"; ls -la'
 
 - name: projects
   cat: DIRS
   desc: "Projects E:"
   cmd:
     win:   'cd "E:\Projects"; ls'
-    linux: 'cd "/mnt/e/Projects"; ls'
+    linux: 'cd "/mnt/e/Projects"; ls -la'
 
 - name: dot
   cat: DIRS
