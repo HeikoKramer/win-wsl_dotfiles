@@ -34,6 +34,18 @@ shortcuts() {
   {{- end }}
 }
 
+functions() {
+  local filter="$1"
+  printf "%-12s %-10s %-s\n" "name" "cat" "desc"
+  {{- range $functions }}
+  {{- if and .linux (not (hasKey $shortcutFunctionRefs .name)) }}
+  if [ -z "$filter" ] || [ "$filter" = "{{ .cat }}" ]; then
+    printf "%-12s %-10s %-s\n" "{{ .name }}" "{{ .cat }}" "{{ .desc }}"
+  fi
+  {{- end }}
+  {{- end }}
+}
+
 # Render one function per shortcut/function (Linux command preferred, else 'both')
 {{- range $shortcuts }}
 {{- $cmd := .cmd -}}

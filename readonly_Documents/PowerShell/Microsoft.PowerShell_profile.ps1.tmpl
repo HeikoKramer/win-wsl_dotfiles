@@ -61,6 +61,18 @@ $Shortcuts = @(
 {{ end }}
 )
 
+$Functions = @(
+{{ range $functions }}
+  {{- if and .win (not (hasKey $shortcutFunctionRefs .name)) }}
+    [pscustomobject]@{
+        name = "{{ .name }}"
+        cat  = "{{ .cat }}"
+        desc = "{{ .desc }}"
+    };
+  {{- end }}
+{{ end }}
+)
+
 # --- Attach function helpers from YAML ---
 {{ range $functions }}
 {{- if .win }}
@@ -95,6 +107,15 @@ function shortcuts {
       | Format-Table -AutoSize
 }
 
+function functions {
+    param([string]$Category)
+    $Functions
+      | Where-Object { !$Category -or $_.cat -eq $Category }
+      | Sort-Object cat,name
+      | Select-Object name,cat,desc
+      | Format-Table -AutoSize
+}
+
 try { Start-Service ssh-agent -ErrorAction SilentlyContinue | Out-Null } catch {}
 
 function Show-DotfilesVersion {
@@ -118,4 +139,4 @@ function Show-DotfilesVersion {
 }
 
 Show-DotfilesVersion
-Write-Host "Profile loaded. 'shortcuts' lists everything, 'shortcuts DIRS' filters."
+Write-Host "Profile loaded. 'shortcuts' lists everything, 'functions' shows helpers."
