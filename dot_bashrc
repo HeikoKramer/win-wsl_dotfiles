@@ -150,6 +150,7 @@ generate_shortcut_helpers() {
 
 generate_shortcut_helpers
 
+# Load the generated functions into the current shell
 if [ -f "$HOME/.bash_functions" ]; then
   # shellcheck disable=SC1090
   . "$HOME/.bash_functions"
