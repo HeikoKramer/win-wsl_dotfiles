@@ -127,6 +127,48 @@ if [ -z "${DOTFILES:-}" ]; then
   fi
   DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 fi
+
+# Normalize DOTFILES path under WSL when chezmoi returns a Windows path
+if [ ! -d "$DOTFILES" ]; then
+  is_wsl=false
+  if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+    is_wsl=true
+  elif grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null; then
+    is_wsl=true
+  fi
+
+  if [ "$is_wsl" = true ]; then
+    original_dotfiles="$DOTFILES"
+    converted_dotfiles=""
+
+    if command -v wslpath >/dev/null 2>&1; then
+      converted_dotfiles="$(wslpath -u "$original_dotfiles" 2>/dev/null || true)"
+    fi
+
+    if [ -z "$converted_dotfiles" ]; then
+      case "$original_dotfiles" in
+        [A-Za-z]:[\\/]*|[A-Za-z]:)
+          drive_letter="$(printf '%s' "$original_dotfiles" | cut -c1 | tr 'A-Z' 'a-z')"
+          path_rest="${original_dotfiles#??}"
+          path_rest="${path_rest#\\}"
+          path_rest="${path_rest#/}"
+          path_rest="$(printf '%s' "$path_rest" | tr '\\' '/')"
+          converted_dotfiles="/mnt/$drive_letter"
+          if [ -n "$path_rest" ]; then
+            converted_dotfiles="$converted_dotfiles/$path_rest"
+          fi
+          ;;
+      esac
+    fi
+
+    if [ -n "$converted_dotfiles" ] && [ -d "$converted_dotfiles" ]; then
+      DOTFILES="$converted_dotfiles"
+    else
+      printf 'Warning: DOTFILES path "%s" could not be converted for WSL. '\
+'Run "chezmoi source-path" to locate the repository.\n' "$original_dotfiles" >&2
+    fi
+  fi
+fi
 export DOTFILES
 
 # Load generated helper functions (shortcuts, etc.)
