@@ -65,3 +65,68 @@
     } else {
         git push
     }
+
+- name: gall
+  cat: GIT
+  desc: Git fetch + fast-forward merge helper
+  linux: |-
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      echo "Not inside a Git repository." >&2
+      return 1
+    fi
+
+    local remote="${1:-origin}"
+    local branch="$2"
+
+    if [ -z "$branch" ]; then
+      branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+      if [ -z "$branch" ] || [ "$branch" = "HEAD" ]; then
+        echo "Unable to determine the current branch. Specify a branch explicitly." >&2
+        return 1
+      fi
+    fi
+
+    if ! git fetch "$remote" "$branch"; then
+      return 1
+    fi
+
+    if ! git merge --ff-only "$remote/$branch"; then
+      echo "Fast-forward merge failed for $remote/$branch. Resolve conflicts and try again." >&2
+      return 1
+    fi
+  win: |-
+    param(
+        [string]$Remote = 'origin',
+        [string]$Branch
+    )
+
+    $insideRepo = git rev-parse --is-inside-work-tree 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not $insideRepo) {
+        Write-Error "Not inside a Git repository."
+        return
+    }
+
+    if (-not $Branch) {
+        $Branch = git rev-parse --abbrev-ref HEAD 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Unable to determine the current branch. Specify -Branch."
+            return
+        }
+
+        $Branch = $Branch.Trim()
+        if ([string]::IsNullOrWhiteSpace($Branch) -or $Branch -eq 'HEAD') {
+            Write-Error "Unable to determine the current branch. Specify -Branch."
+            return
+        }
+    }
+
+    git fetch $Remote $Branch
+    if ($LASTEXITCODE -ne 0) {
+        return
+    }
+
+    git merge --ff-only "$Remote/$Branch"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Fast-forward merge failed for $Remote/$Branch. Resolve conflicts and try again."
+        return
+    }
