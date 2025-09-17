@@ -13,6 +13,13 @@ applied on both operating systems.
 | `home/dot_bash_functions.tmpl` | chezmoi template that turns the shared shortcut definitions into Bash functions. |
 | `readonly_Documents/PowerShell/Microsoft.PowerShell_profile.ps1.tmpl` | PowerShell profile template. chezmoi renders the final `Microsoft.PowerShell_profile.ps1` on Windows. |
 | `common/shortcuts.yml` | Single source of truth for helper commands and directory shortcuts that are rendered for both shells. |
+| `common/functions.yml` | Shared function definitions (for example, Git helpers) that are rendered alongside the shortcuts. |
+
+Quick reference:
+
+- Run `shortcuts` (optionally with a category such as `DIRS`) to list the generated helpers from the YAML files.
+- Run `functions` to focus on the custom helpers from `common/functions.yml`.
+- Directory shortcuts land you in the target folder and, on Linux, automatically show the contents with `ls -la`.
 
 ## Installation
 
@@ -26,13 +33,24 @@ applied on both operating systems.
    Both shells display the current Git branch and commit so you can see which
    version of the dotfiles is active.
 
+## Helper commands
+
+Two generated helpers keep the shells in sync:
+
+- `shortcuts [CATEGORY]` lists every shortcut defined in `common/shortcuts.yml` (plus any generated functions). Use it to confirm the name, category, and description before calling a helper.
+- `functions [CATEGORY]` lists the custom helpers stored in `common/functions.yml`. This is useful when you only need the higher-level workflows (for example, the Git `allg` helper).
+
+Both commands understand the same categories used in the YAML files, so filtering stays consistent on Windows and Linux.
+
 ## Adding new shortcuts or aliases
 
-1. Edit `common/shortcuts.yml` and add a new entry. Each shortcut supports a
-   `win`, `linux`, or `both` command. Provide an English description and keep
-   the category (`cat`) consistent with the existing entries.
+1. Edit `common/shortcuts.yml` for shortcuts or `common/functions.yml` for
+   reusable helpers. Each shortcut supports a `win`, `linux`, or `both`
+   command. Provide an English description and keep the category (`cat`)
+   consistent with the existing entries.
 2. Run `chezmoi apply` to regenerate the derived files. The PowerShell profile
-   and Bash helper functions will be rebuilt using the updated shortcut data.
+   and Bash helper functions will be rebuilt using the updated shortcut or
+   function data.
 3. Open a new shell or run the `short` helper to review the rendered shortcuts.
 
 ## Troubleshooting
