@@ -19,7 +19,7 @@ function Edit-File {
   & $editor $Path
 }
 
-# --- Shortcuts aus YAML laden ---
+# --- Load shortcuts from YAML ---
 $Shortcuts = @(
 {{ $data := (include "common/shortcuts.yml" | fromYaml) }}
 {{ range $data }}
@@ -35,13 +35,13 @@ $Shortcuts = @(
 {{ end }}
 )
 
-# --- Functions registrieren ---
+# --- Register shortcut functions ---
 foreach ($s in $Shortcuts) {
     if ([string]::IsNullOrWhiteSpace($s.cmd)) { continue }
     Set-Item -Path "function:$($s.name)" -Value ([scriptblock]::Create($s.cmd)) -Force
 }
 
-# --- Übersicht: shortcuts [KAT] ---
+# --- Overview: shortcuts [CATEGORY] ---
 function shortcuts {
     param([string]$Category)
     $Shortcuts
@@ -89,4 +89,4 @@ function allg {
 }
 
 try { Start-Service ssh-agent -ErrorAction SilentlyContinue | Out-Null } catch {}
-Write-Host "Profile geladen. 'shortcuts' listet alles, 'shortcuts DIRS' filtert."
+Write-Host "Profile loaded. 'shortcuts' lists everything, 'shortcuts DIRS' filters."
