@@ -120,6 +120,33 @@ fi
 # Default editor
 export EDITOR=vim
 
+# Automatically refresh dotfiles from chezmoi on shell start
+dotfiles_auto_update() {
+  if [ -n "${DOTFILES_PROFILE_AUTOUPDATED:-}" ]; then
+    return 0
+  fi
+
+  if ! command -v chezmoi >/dev/null 2>&1; then
+    return 0
+  fi
+
+  export DOTFILES_PROFILE_AUTOUPDATED=1
+
+  if chezmoi update >/dev/null 2>&1; then
+    if [ -f "$HOME/.bashrc" ]; then
+      # shellcheck disable=SC1090
+      . "$HOME/.bashrc"
+      return 0
+    fi
+  else
+    echo "Warning: chezmoi update failed." >&2
+  fi
+
+  return 0
+}
+
+dotfiles_auto_update
+
 # Resolve the dotfiles source directory for reuse in shortcuts
 if [ -z "${DOTFILES:-}" ]; then
   if command -v chezmoi >/dev/null 2>&1; then
@@ -196,7 +223,31 @@ generate_shortcut_helpers
 if [ -f "$HOME/.bash_functions" ]; then
   # shellcheck disable=SC1090
   . "$HOME/.bash_functions"
+else
+  echo "Warning: ~/.bash_functions is missing. Run 'chezmoi apply'." >&2
 fi
+
+dotfiles_print_version() {
+  local version="unknown"
+  local branch=""
+
+  if [ -n "$DOTFILES" ] && [ -d "$DOTFILES/.git" ] && command -v git >/dev/null 2>&1; then
+    version="$(git -C "$DOTFILES" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+    branch="$(git -C "$DOTFILES" rev-parse --abbrev-ref HEAD 2>/dev/null || true)"
+    if [ -n "$branch" ] && [ "$branch" != "HEAD" ]; then
+      version="$branch@$version"
+    fi
+  fi
+
+  local platform="Linux"
+  if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+    platform="WSL"
+  fi
+
+  printf 'Dotfiles version (%s): %s\n' "$platform" "$version"
+}
+
+dotfiles_print_version
 
 # Git helper for add/status/commit/push
 allg() {

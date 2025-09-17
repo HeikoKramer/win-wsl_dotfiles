@@ -9,7 +9,7 @@ applied on both operating systems.
 
 | Path | Purpose |
 | --- | --- |
-| `dot_bashrc` | Bash profile applied in WSL. Detects the dotfiles directory, renders helper functions, and sources shared shortcuts. |
+| `dot_bashrc` | Bash profile applied in WSL. Detects the dotfiles directory, refreshes the checkout with `chezmoi update`, renders helper functions, and sources shared shortcuts. |
 | `home/dot_bash_functions.tmpl` | chezmoi template that turns the shared shortcut definitions into Bash functions. |
 | `readonly_Documents/PowerShell/Microsoft.PowerShell_profile.ps1.tmpl` | PowerShell profile template. chezmoi renders the final `Microsoft.PowerShell_profile.ps1` on Windows. |
 | `common/shortcuts.yml` | Single source of truth for helper commands and directory shortcuts that are rendered for both shells. |
@@ -23,6 +23,8 @@ applied on both operating systems.
    PowerShell profile, Bash helper functions, and any other managed files.
 4. Open a new terminal session. Bash regenerates `~/.bash_functions` on demand
    and automatically sources it, so the shortcut helpers are always available.
+   Both shells display the current Git branch and commit so you can see which
+   version of the dotfiles is active.
 
 ## Adding new shortcuts or aliases
 
