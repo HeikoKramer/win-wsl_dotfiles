@@ -10,19 +10,22 @@
   cat: CONFIG
   desc: shortcuts.yml edit
   cmd:
-    win:  'Edit-File "E:\Configs\dotfiles\common\shortcuts.yml"'
+    win:   'Edit-File "E:\Configs\dotfiles\common\shortcuts.yml"'
+    linux: '${EDITOR:-vim} "$DOTFILES/common/shortcuts.yml"'
 
 - name: pro
   cat: CONFIG
   desc: PS profile (tmpl) edit
   cmd:
-    win:  '$p=(chezmoi source-path $PROFILE); Edit-File $p'
+    win:   '$p=(chezmoi source-path $PROFILE); Edit-File $p'
+    linux: '${EDITOR:-vim} "$DOTFILES/readonly_Documents/PowerShell/Microsoft.PowerShell_profile.ps1.tmpl"'
 
 - name: fresh
   cat: CONFIG
   desc: Profile reload
   cmd:
-    win:  '. $PROFILE'
+    win:   '. $PROFILE'
+    linux: 'source ~/.bashrc'
 
 - name: chez
   cat: CONFIG
@@ -40,7 +43,8 @@
   cat: CONFIG
   desc: .gitconfig edit
   cmd:
-    win:  'Edit-File "$HOME\.gitconfig"'
+    win:   'Edit-File "$HOME\.gitconfig"'
+    linux: '${EDITOR:-vim} "$HOME/.gitconfig"'
 
 # ==== DIRECTORIES ====
 
@@ -48,7 +52,8 @@
   cat: DIRS
   desc: SSH Keys
   cmd:
-    win:  'cd "$HOME\.ssh"; ls'
+    win:   'cd "$HOME\.ssh"; ls'
+    linux: 'cd "$HOME/.ssh"; ls'
 
 - name: down
   cat: DIRS
