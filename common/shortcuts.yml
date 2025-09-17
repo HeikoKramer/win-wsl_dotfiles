@@ -84,8 +84,7 @@
   cat: DIRS
   desc: open dotfiles repo
   cmd:
-    win:   'cd "$env:DOTFILES"; ls'
-    linux: 'cd "$DOTFILES"; ls'
+    fromFunctions: true
 
 # ==== COMMANDS ====
 

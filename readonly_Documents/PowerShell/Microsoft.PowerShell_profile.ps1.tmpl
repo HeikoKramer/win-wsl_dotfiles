@@ -40,13 +40,20 @@ function Edit-File {
 # --- Load shortcuts from YAML ---
 {{ $shortcuts := (include "common/shortcuts.yml" | fromYaml) }}
 {{ $functions := (include "common/functions.yml" | fromYaml) }}
+{{ $shortcutFunctionRefs := dict }}
+{{ range $shortcuts }}
+  {{- if and .cmd (hasKey .cmd "fromFunctions") -}}
+    {{- $_ := set $shortcutFunctionRefs .name true -}}
+  {{- end -}}
+{{ end }}
 $Shortcuts = @(
 {{ range $shortcuts }}
     [pscustomobject]@{
         name = "{{ .name }}"
         cat  = "{{ .cat }}"
         desc = "{{ .desc }}"
-        cmd  = {{- if and (hasKey .cmd "win")   (eq $.chezmoi.os "windows") -}} '{{ index .cmd "win" }}'
+        cmd  = {{- if and .cmd (hasKey .cmd "fromFunctions") -}} '[function]'
+       {{- else if and (hasKey .cmd "win")   (eq $.chezmoi.os "windows") -}} '{{ index .cmd "win" }}'
        {{- else if and (hasKey .cmd "linux") (eq $.chezmoi.os "linux")   -}} '{{ index .cmd "linux" }}'
        {{- else if hasKey .cmd "both" -}} '{{ index .cmd "both" }}'
        {{- else -}} '' {{- end }}
@@ -57,12 +64,14 @@ $Shortcuts = @(
 # --- Attach function helpers from YAML ---
 {{ range $functions }}
 {{- if .win }}
+{{- if not (hasKey $shortcutFunctionRefs .name) }}
 $Shortcuts += [pscustomobject]@{
     name = "{{ .name }}"
     cat  = "{{ .cat }}"
     desc = "{{ .desc }}"
     cmd  = '[function]'
 }
+{{- end }}
 Set-Item -Path "function:{{ .name }}" -Value ([scriptblock]::Create(@'
 {{ .win | nindent 0 }}
 '@)) -Force

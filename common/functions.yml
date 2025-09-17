@@ -130,3 +130,89 @@
         Write-Error "Fast-forward merge failed for $Remote/$Branch. Resolve conflicts and try again."
         return
     }
+
+- name: dot
+  cat: DIRS
+  desc: open dotfiles repo
+  linux: |-
+    if [ -z "$DOTFILES" ]; then
+      echo "DOTFILES environment variable is not set." >&2
+      return 1
+    fi
+
+    (
+      cd "$DOTFILES" || return 1
+
+      case "$1" in
+        -push)
+          shift
+          allg "$@"
+          ;;
+        -pull)
+          shift
+          gall "$@"
+          ;;
+        *)
+          ls "$@"
+          ;;
+      esac
+    )
+  win: |-
+    param(
+        [string]$Mode,
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Rest
+    )
+
+    if (-not $env:DOTFILES) {
+        Write-Error "DOTFILES environment variable is not set."
+        return
+    }
+
+    Push-Location
+    try {
+        Set-Location $env:DOTFILES
+
+        switch ($Mode) {
+            '-push' {
+                if ($Rest -and $Rest.Count -gt 0) {
+                    $message = [string]::Join(' ', $Rest)
+                    allg $message
+                }
+                else {
+                    allg
+                }
+            }
+            '-pull' {
+                $remote = $null
+                $branch = $null
+                if ($Rest.Count -gt 0) { $remote = $Rest[0] }
+                if ($Rest.Count -gt 1) { $branch = $Rest[1] }
+
+                if ($remote -and $branch) {
+                    gall $remote $branch
+                }
+                elseif ($remote) {
+                    gall $remote
+                }
+                else {
+                    gall
+                }
+            }
+            Default {
+                $listArgs = @()
+                if ($Mode) { $listArgs += $Mode }
+                if ($Rest) { $listArgs += $Rest }
+
+                if ($listArgs.Count -gt 0) {
+                    Get-ChildItem @listArgs
+                }
+                else {
+                    Get-ChildItem
+                }
+            }
+        }
+    }
+    finally {
+        Pop-Location
+    }
