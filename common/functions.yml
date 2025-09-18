@@ -167,54 +167,57 @@
         return
     }
 
-    Push-Location
-    try {
-        Set-Location $env:DOTFILES
+    if (-not (Test-Path -Path $env:DOTFILES)) {
+        Write-Error "DOTFILES path '$($env:DOTFILES)' does not exist."
+        return
+    }
 
-        switch ($Mode) {
-            '-push' {
-                if ($Rest -and $Rest.Count -gt 0) {
-                    $message = [string]::Join(' ', $Rest)
-                    allg $message
-                }
-                else {
-                    allg
-                }
+    Set-Location -Path $env:DOTFILES
 
-                return # prevent falling through to default listing behaviour
+    if (-not $Rest) {
+        $Rest = @()
+    }
+
+    switch ($Mode) {
+        '-push' {
+            if ($Rest -and $Rest.Count -gt 0) {
+                $message = [string]::Join(' ', $Rest)
+                allg $message
             }
-            '-pull' {
-                $remote = $null
-                $branch = $null
-                if ($Rest.Count -gt 0) { $remote = $Rest[0] }
-                if ($Rest.Count -gt 1) { $branch = $Rest[1] }
-
-                if ($remote -and $branch) {
-                    gall $remote $branch
-                }
-                elseif ($remote) {
-                    gall $remote
-                }
-                else {
-                    gall
-                }
-
-                return # prevent falling through to default listing behaviour
+            else {
+                allg
             }
-            Default {
-                $listArgs = @()
-                if ($Mode) { $listArgs += $Mode }
-                if ($Rest) { $listArgs += $Rest }
 
-                if ($listArgs.Count -gt 0) {
-                    Get-ChildItem @listArgs
-                }
-                else {
-                    Get-ChildItem
-                }
+            return # prevent falling through to default listing behaviour
+        }
+        '-pull' {
+            $remote = $null
+            $branch = $null
+            if ($Rest.Count -gt 0) { $remote = $Rest[0] }
+            if ($Rest.Count -gt 1) { $branch = $Rest[1] }
+
+            if ($remote -and $branch) {
+                gall $remote $branch
+            }
+            elseif ($remote) {
+                gall $remote
+            }
+            else {
+                gall
+            }
+
+            return # prevent falling through to default listing behaviour
+        }
+        Default {
+            $listArgs = @()
+            if ($Mode) { $listArgs += $Mode }
+            if ($Rest.Count -gt 0) { $listArgs += $Rest }
+
+            if ($listArgs.Count -gt 0) {
+                Get-ChildItem @listArgs
+            }
+            else {
+                Get-ChildItem
             }
         }
-    }
-    finally {
-        Pop-Location
     }
