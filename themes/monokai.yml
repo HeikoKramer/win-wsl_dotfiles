@@ -1,0 +1,104 @@
+name: Monokai
+mode: dark
+font:
+  family: Cascadia Code PL
+  size: 11
+palette:
+  background: '#272822'
+  foreground: '#F8F8F2'
+  selection: '#49483E'
+  cursor: '#F8F8F0'
+  black: '#272822'
+  red: '#F92672'
+  green: '#A6E22E'
+  yellow: '#E6DB74'
+  blue: '#66D9EF'
+  purple: '#AE81FF'
+  cyan: '#A1EFE4'
+  white: '#F8F8F2'
+  brightBlack: '#75715E'
+  brightRed: '#F92672'
+  brightGreen: '#A6E22E'
+  brightYellow: '#F4BF75'
+  brightBlue: '#66D9EF'
+  brightPurple: '#AE81FF'
+  brightCyan: '#A1EFE4'
+  brightWhite: '#F9F8F5'
+accent:
+  color: '#AE81FF'
+wallpaper:
+  path: '%USERPROFILE%\\Pictures\\Wallpapers\\monokai.jpg'
+editors:
+  vscode:
+    theme: 'Monokai Dimmed'
+    cursorColor: '#F8F8F2'
+    selectionBackground: '#49483E'
+  neovim:
+    colorscheme: monokai
+  notepadpp:
+    theme: 'Monokai'
+  helix:
+    theme: monokai
+  sublimeText:
+    theme: 'Monokai.sublime-theme'
+targets:
+  windowsTerminal:
+    scheme:
+      name: Monokai
+      foreground: '#F8F8F2'
+      background: '#272822'
+      selectionBackground: '#49483E'
+      cursorColor: '#F8F8F0'
+      black: '#272822'
+      blue: '#66D9EF'
+      cyan: '#A1EFE4'
+      green: '#A6E22E'
+      purple: '#AE81FF'
+      red: '#F92672'
+      white: '#F8F8F2'
+      yellow: '#E6DB74'
+      brightBlack: '#75715E'
+      brightBlue: '#66D9EF'
+      brightCyan: '#A1EFE4'
+      brightGreen: '#A6E22E'
+      brightPurple: '#AE81FF'
+      brightRed: '#F92672'
+      brightWhite: '#F9F8F5'
+      brightYellow: '#F4BF75'
+    profileDefaults:
+      colorScheme: Monokai
+  powershell:
+    block: |-
+      # Monokai prompt colors
+      $env:PromptForeground = '#F8F8F2'
+      $env:PromptBackground = '#272822'
+  bash:
+    block: |-
+      # Monokai prompt colors
+      export PS1_COLOR_FG="#F8F8F2"
+      export PS1_COLOR_BG="#272822"
+  windows:
+    accentColor: '#AE81FF'
+    wallpaper: '%USERPROFILE%\\Pictures\\Wallpapers\\monokai.jpg'
+  vscode:
+    theme: 'Monokai Dimmed'
+    colorCustomizations:
+      editor.background: '#272822'
+      editor.foreground: '#F8F8F2'
+      editor.selectionBackground: '#49483E'
+      terminal.background: '#272822'
+      terminal.foreground: '#F8F8F2'
+  notepadpp:
+    content: |-
+      <?xml version="1.0" encoding="Windows-1252" ?>
+      <NotepadPlus>
+        <GlobalStyles>
+          <WidgetStyle name="Default Style" fgColor="F8F8F2" bgColor="272822" />
+          <WidgetStyle name="Selected text colour" fgColor="F8F8F2" bgColor="49483E" />
+        </GlobalStyles>
+      </NotepadPlus>
+  vim:
+    block: |-
+      " Monokai theme integration
+      set background=dark
+      colorscheme monokai
