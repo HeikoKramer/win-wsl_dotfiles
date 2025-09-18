@@ -11,10 +11,12 @@ if ($moduleRoot -and (Test-Path -LiteralPath $moduleRoot)) {
     $env:PSModulePath = ("{0}{1}{2}" -f $moduleRoot, [IO.Path]::PathSeparator, $env:PSModulePath)
   }
 
-  try {
-    Import-Module -Name 'SysColors' -DisableNameChecking -ErrorAction Stop | Out-Null
-  } catch {
-    Write-Verbose "SysColors module is not available: $_"
+  if (-not (Get-Module -Name 'SysColors' -ErrorAction SilentlyContinue)) {
+    try {
+      Import-Module -Name 'SysColors' -DisableNameChecking -ErrorAction Stop | Out-Null
+    } catch {
+      Write-Verbose "SysColors module is not available: $_"
+    }
   }
 }
 
