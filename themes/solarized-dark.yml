@@ -1,0 +1,105 @@
+name: Solarized Dark
+mode: dark
+font:
+  family: Fira Code
+  size: 11
+palette:
+  background: '#002b36'
+  foreground: '#839496'
+  selection: '#073642'
+  cursor: '#93a1a1'
+  black: '#073642'
+  red: '#dc322f'
+  green: '#859900'
+  yellow: '#b58900'
+  blue: '#268bd2'
+  purple: '#6c71c4'
+  cyan: '#2aa198'
+  white: '#eee8d5'
+  brightBlack: '#002b36'
+  brightRed: '#cb4b16'
+  brightGreen: '#586e75'
+  brightYellow: '#657b83'
+  brightBlue: '#839496'
+  brightPurple: '#6c71c4'
+  brightCyan: '#93a1a1'
+  brightWhite: '#fdf6e3'
+accent:
+  color: '#268bd2'
+wallpaper:
+  path: '%USERPROFILE%\\Pictures\\Wallpapers\\solarized-dark.jpg'
+editors:
+  vscode:
+    theme: 'Solarized Dark'
+    cursorColor: '#93a1a1'
+    selectionBackground: '#073642'
+  neovim:
+    colorscheme: solarized8_dark
+  notepadpp:
+    theme: 'Solarized Dark'
+  helix:
+    theme: solarized_dark
+  sublimeText:
+    theme: 'Solarized Dark.sublime-theme'
+targets:
+  windowsTerminal:
+    scheme:
+      name: Solarized Dark
+      foreground: '#839496'
+      background: '#002B36'
+      selectionBackground: '#073642'
+      cursorColor: '#93A1A1'
+      black: '#073642'
+      blue: '#268BD2'
+      cyan: '#2AA198'
+      green: '#859900'
+      purple: '#6C71C4'
+      red: '#DC322F'
+      white: '#EEE8D5'
+      yellow: '#B58900'
+      brightBlack: '#002B36'
+      brightBlue: '#839496'
+      brightCyan: '#93A1A1'
+      brightGreen: '#586E75'
+      brightPurple: '#6C71C4'
+      brightRed: '#CB4B16'
+      brightWhite: '#FDF6E3'
+      brightYellow: '#657B83'
+    profileDefaults:
+      colorScheme: Solarized Dark
+  powershell:
+    block: |-
+      # Solarized Dark prompt colors
+      $env:PromptForeground = '#839496'
+      $env:PromptBackground = '#002B36'
+  bash:
+    block: |-
+      # Solarized Dark prompt colors
+      export PS1_COLOR_FG="#839496"
+      export PS1_COLOR_BG="#002B36"
+  windows:
+    accentColor: '#268BD2'
+    wallpaper: '%USERPROFILE%\\Pictures\\Wallpapers\\solarized-dark.jpg'
+  vscode:
+    theme: 'Solarized Dark'
+    colorCustomizations:
+      editor.background: '#002B36'
+      editor.foreground: '#839496'
+      editor.selectionBackground: '#073642'
+      terminal.background: '#002B36'
+      terminal.foreground: '#839496'
+  notepadpp:
+    content: |-
+      <?xml version="1.0" encoding="Windows-1252" ?>
+      <NotepadPlus>
+        <GlobalStyles>
+          <WidgetStyle name="Default Style" fgColor="839496" bgColor="002B36" />
+          <WidgetStyle name="Selected text colour" fgColor="839496" bgColor="073642" />
+        </GlobalStyles>
+      </NotepadPlus>
+  vim:
+    block: |-
+      " Solarized Dark theme integration
+      set background=dark
+      colorscheme solarized8
+      let g:solarized_termtrans=1
