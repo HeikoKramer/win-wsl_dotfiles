@@ -207,13 +207,28 @@ generate_shortcut_helpers() {
     return 0
   fi
 
-  if [ ! -f "$output" ] || [ "$template" -nt "$output" ] || [ "$DOTFILES/common/shortcuts.yml" -nt "$output" ] || [ "$DOTFILES/common/functions.yml" -nt "$output" ]; then
-    if chezmoi execute-template <"$template" >"$output"; then
-      chmod 600 "$output"
+  local tmp
+  tmp="$(mktemp "${TMPDIR:-/tmp}/.bash_functions.XXXXXX")" || {
+    echo "Failed to create temporary file for Bash shortcuts." >&2
+    return 1
+  }
+
+  if ! chezmoi execute-template <"$template" >"$tmp"; then
+    echo "Failed to render Bash shortcuts from template." >&2
+    rm -f "$tmp"
+    return 1
+  fi
+
+  if [ ! -f "$output" ] || ! cmp -s "$tmp" "$output"; then
+    if chmod 600 "$tmp" && mv "$tmp" "$output"; then
+      :
     else
-      echo "Failed to render Bash shortcuts from template." >&2
+      echo "Failed to install rendered Bash shortcuts." >&2
+      rm -f "$tmp"
       return 1
     fi
+  else
+    rm -f "$tmp"
   fi
 }
 
