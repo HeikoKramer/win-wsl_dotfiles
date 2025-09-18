@@ -312,8 +312,13 @@ function Invoke-SysColorsPlan {
         return @()
     }
 
-    $timestamp     = Get-Date
-    $backupPath    = Get-SysColorsBackupPath -Timestamp $timestamp
+    $timestamp  = $null
+    $backupPath = $null
+
+    if (-not $WhatIf -and -not $SkipBackup) {
+        $timestamp  = Get-Date
+        $backupPath = Get-SysColorsBackupPath -Timestamp $timestamp
+    }
     $manifestItems = @()
 
     foreach ($step in $planItems) {
@@ -335,13 +340,13 @@ function Invoke-SysColorsPlan {
         }
     }
 
-    if (-not $WhatIf -and -not $SkipBackup) {
+    if ($backupPath) {
         Save-SysColorsManifest -Entries $manifestItems -Destination $backupPath
     }
 
     [pscustomobject]@{
         Timestamp  = $timestamp
-        BackupPath = if ($SkipBackup) { $null } else { $backupPath }
+        BackupPath = $backupPath
         Steps      = $planItems
     }
 }
