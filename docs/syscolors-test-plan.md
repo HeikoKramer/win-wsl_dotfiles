@@ -21,49 +21,67 @@ checklist whenever new targets or capabilities are added so that the coverage st
 
 ## 2. Theme application
 
-| Goal | Command |
-| ---- | ------- |
-| Apply a theme by name | ```powershell
-SysColors '<ThemeName>'
-``` |
-| Apply a theme from a specific file path | ```powershell
-SysColors -Path 'C:\path\to\theme.yml'
-``` |
-| Apply without taking a backup (for rapid iteration only) | ```powershell
-SysColors '<ThemeName>' -SkipBackup
-``` |
+- **Apply a theme by name**
+
+  ```powershell
+  SysColors '<ThemeName>'
+  ```
+
+- **Apply a theme from a specific file path**
+
+  ```powershell
+  SysColors -Path 'C:\path\to\theme.yml'
+  ```
+
+- **Apply without taking a backup (for rapid iteration only)**
+
+  ```powershell
+  SysColors '<ThemeName>' -SkipBackup
+  ```
 
 After running an apply command, continue with the per-writer validation section.
 
 ## 3. Preview mode (`-WhatIf`)
 
-| Scenario | Command |
-| -------- | ------- |
-| Review the execution plan without writing to disk | ```powershell
-SysColors '<ThemeName>' -WhatIf -Verbose
-``` |
-| Preview when supplying an explicit file | ```powershell
-SysColors -Path 'C:\path\to\theme.yml' -WhatIf -Verbose
-``` |
+- **Review the execution plan without writing to disk**
+
+  ```powershell
+  SysColors '<ThemeName>' -WhatIf -Verbose
+  ```
+
+- **Preview when supplying an explicit file**
+
+  ```powershell
+  SysColors -Path 'C:\path\to\theme.yml' -WhatIf -Verbose
+  ```
 
 Confirm that each step prints the expected destination path before executing the actual apply.
 
 ## 4. Restore workflow
 
-| Scenario | Command |
-| -------- | ------- |
-| List available backups and their targets | ```powershell
-SysColors-Restore -List | Format-Table Timestamp, Description, Path
-``` |
-| Restore the most recent snapshot | ```powershell
-SysColors-Restore -Latest
-``` |
-| Restore a specific backup by name | ```powershell
-SysColors-Restore '<BackupFolderName>'
-``` |
-| Dry-run a restore | ```powershell
-SysColors-Restore -Latest -WhatIf
-``` |
+- **List available backups and their targets**
+
+  ```powershell
+  SysColors-Restore -List | Format-Table Timestamp, Description, Path
+  ```
+
+- **Restore the most recent snapshot**
+
+  ```powershell
+  SysColors-Restore -Latest
+  ```
+
+- **Restore a specific backup by name**
+
+  ```powershell
+  SysColors-Restore '<BackupFolderName>'
+  ```
+
+- **Dry-run a restore**
+
+  ```powershell
+  SysColors-Restore -Latest -WhatIf
+  ```
 
 After restoring, re-run the relevant per-writer checks to confirm the previous state returned.
 
