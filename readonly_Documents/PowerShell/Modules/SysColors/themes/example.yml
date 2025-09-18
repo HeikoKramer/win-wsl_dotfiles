@@ -1,0 +1,63 @@
+name: Example Theme
+description: Example theme demonstrating SysColors structure.
+tags:
+  - sample
+metadata:
+  author: automation
+targets:
+  windowsTerminal:
+    settingsPath: "%LOCALAPPDATA%\\Packages\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\LocalState\\settings.json"
+    scheme:
+      name: Example Theme
+      foreground: '#D0D0D0'
+      background: '#101010'
+      selectionBackground: '#303030'
+      cursorColor: '#FFFFFF'
+      black: '#000000'
+      blue: '#3465A4'
+      cyan: '#06989A'
+      green: '#4E9A06'
+      purple: '#75507B'
+      red: '#CC0000'
+      white: '#D3D7CF'
+      yellow: '#C4A000'
+      brightBlack: '#555753'
+      brightBlue: '#729FCF'
+      brightCyan: '#34E2E2'
+      brightGreen: '#8AE234'
+      brightPurple: '#AD7FA8'
+      brightRed: '#EF2929'
+      brightWhite: '#EEEEEC'
+      brightYellow: '#FCE94F'
+    profileDefaults:
+      colorScheme: Example Theme
+    profiles:
+      - Name: PowerShell
+        colorScheme: Example Theme
+  powershell:
+    block: |
+      # SysColors example block
+      $ThemeName = 'Example Theme'
+  bash:
+    block: |
+      # Example Theme colors
+      export EXAMPLE_THEME="Example Theme"
+  windows:
+    accentColor: '#1E90FF'
+    wallpaper: '%USERPROFILE%\\Pictures\\example.jpg'
+  vscode:
+    theme: Default Dark+
+    colorCustomizations:
+      editor.background: '#101010'
+  notepadpp:
+    content: |
+      <?xml version="1.0" encoding="Windows-1252" ?>
+      <NotepadPlus>
+        <GlobalStyles>
+          <WidgetStyle name="Default Style" fgColor="D0D0D0" bgColor="101010" />
+        </GlobalStyles>
+      </NotepadPlus>
+  vim:
+    block: |
+      " Example theme snippet
+      colorscheme desert

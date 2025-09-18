@@ -53,3 +53,24 @@ Both commands understand the same categories used in the YAML files, so filterin
    function data.
 3. Open a new shell or run the `short` helper to review the rendered shortcuts.
 
+
+## SysColors PowerShell module
+
+The `SysColors` PowerShell module lives under `readonly_Documents/PowerShell/Modules/SysColors`.
+It discovers YAML theme definitions, builds an execution plan, and applies the updates to
+multiple targets (Windows Terminal, the PowerShell profile, the Bash profile, Windows accent
+color, and editors such as VS Code, Notepad++, and Vim).
+
+Usage overview:
+
+1. Ensure the [`powershell-yaml`](https://www.powershellgallery.com/packages/powershell-yaml)
+   module is installed: `Install-Module powershell-yaml`.
+2. Import the module (the rendered PowerShell profile does this automatically):
+   `Import-Module SysColors`.
+3. List available themes with `SysColors-List` or filter with `SysColors-Where`.
+4. Apply a theme with `SysColors <THEME_NAME>` (use `-WhatIf` to review the plan first).
+5. Restore the most recent backup with `SysColors-Restore -Latest` or list backups
+   with `SysColors-Restore -List` before selecting a specific snapshot.
+
+Theme files live beside the module in the `themes` folder. Create new themes by
+following the schema shown in `example.yml`.

@@ -3,6 +3,21 @@
 $ErrorActionPreference = "Stop"
 Set-Location $HOME
 if (-not $env:DOTFILES) { $env:DOTFILES = "E:\Configs\dotfiles" }
+# Ensure custom modules are available
+$moduleRoot = Join-Path $env:DOTFILES 'readonly_Documents\PowerShell\Modules'
+if ($moduleRoot -and (Test-Path -LiteralPath $moduleRoot)) {
+  $paths = $env:PSModulePath -split [IO.Path]::PathSeparator
+  if ($paths -notcontains $moduleRoot) {
+    $env:PSModulePath = ("{0}{1}{2}" -f $moduleRoot, [IO.Path]::PathSeparator, $env:PSModulePath)
+  }
+
+  try {
+    Import-Module -Name 'SysColors' -ErrorAction Stop | Out-Null
+  } catch {
+    Write-Verbose "SysColors module is not available: $_"
+  }
+}
+
 
 if (-not $env:DOTFILES_PROFILE_AUTOUPDATED) {
   $env:DOTFILES_PROFILE_AUTOUPDATED = '1'
