@@ -12,7 +12,7 @@ if ($moduleRoot -and (Test-Path -LiteralPath $moduleRoot)) {
   }
 
   try {
-    Import-Module -Name 'SysColors' -ErrorAction Stop | Out-Null
+    Import-Module -Name 'SysColors' -DisableNameChecking -ErrorAction Stop | Out-Null
   } catch {
     Write-Verbose "SysColors module is not available: $_"
   }
