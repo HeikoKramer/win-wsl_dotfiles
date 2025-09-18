@@ -140,23 +140,21 @@
       return 1
     fi
 
-    (
-      cd "$DOTFILES" || return 1
+    cd "$DOTFILES" || return 1
 
-      case "$1" in
-        -push)
-          shift
-          allg "$@"
-          ;;
-        -pull)
-          shift
-          gall "$@"
-          ;;
-        *)
-          ls -la "$@"
-          ;;
-      esac
-    )
+    case "$1" in
+      -push)
+        shift
+        allg "$@"
+        ;;
+      -pull)
+        shift
+        gall "$@"
+        ;;
+      *)
+        ls -la "$@"
+        ;;
+    esac
   win: |-
     param(
         [string]$Mode,
