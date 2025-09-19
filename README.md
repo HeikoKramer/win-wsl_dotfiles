@@ -68,8 +68,10 @@ Usage overview:
 2. Import the module (the rendered PowerShell profile does this automatically):
    `Import-Module SysColors`.
 3. List available themes with `SysColors-List` or filter with `SysColors-Where`.
-4. Apply a theme with `SysColors <THEME_NAME>` (use `-WhatIf` to review the plan first).
-5. Restore the most recent backup with `SysColors-Restore -Latest` or list backups
+4. Open a theme definition for editing with `SysColors-Config <THEME_NAME>` (this launches
+   Visual Studio Code via `code` or `code.cmd`).
+5. Apply a theme with `SysColors <THEME_NAME>` (use `-WhatIf` to review the plan first).
+6. Restore the most recent backup with `SysColors-Restore -Latest` or list backups
    with `SysColors-Restore -List` before selecting a specific snapshot.
 
 ### Quick SysColor helper
@@ -80,8 +82,8 @@ main cmdlets:
 - `SysColor -themes` lists available themes (same as `SysColors-List`).
 - `SysColor -backups` shows the saved snapshots (same as `SysColors-Restore -List`).
 - `SysColor -back` restores the most recent snapshot (same as `SysColors-Restore -Latest`).
-- `SysColor -config <Theme>` or a direct switch such as `SysColor -monokai` applies
-  a theme via `SysColors`.
+- `SysColor -config <Theme>` opens the referenced theme YAML in Visual Studio Code.
+- A direct switch such as `SysColor -monokai` applies a theme via `SysColors`.
 
 Combine the helper with `-WhatIf` and `-SkipBackup` to forward the options to the
 underlying cmdlets.

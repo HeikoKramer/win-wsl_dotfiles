@@ -777,6 +777,33 @@ function SysColors {
     }
 }
 
+function SysColors-Config {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position=0)] [string]$Name,
+        [string[]]$Directory,
+        [switch]$WhatIf
+    )
+
+    $resolvedPath = Resolve-SysColorsThemePath -Name $Name -AdditionalDirectories $Directory
+
+    if ($WhatIf) {
+        return $resolvedPath
+    }
+
+    foreach ($commandName in @('code', 'code.cmd')) {
+        $command = Get-Command -Name $commandName -ErrorAction SilentlyContinue
+        if (-not $command) { continue }
+
+        $invocation = if ($command.Path) { $command.Path } else { $command.Name }
+
+        & $invocation $resolvedPath
+        return $resolvedPath
+    }
+
+    throw "Visual Studio Code command-line interface ('code' or 'code.cmd') was not found."
+}
+
 function SysColors-Restore {
     [CmdletBinding(DefaultParameterSetName='List')]
     param(
@@ -813,7 +840,8 @@ function SysColor {
         [switch]$Back,
         [switch]$Themes,
         [switch]$Backups,
-        [Alias('Config')] [string]$Theme,
+        [string]$Theme,
+        [string]$Config,
         [string]$Path,
         [string[]]$Directory,
         [switch]$SkipBackup,
@@ -872,6 +900,7 @@ function SysColor {
         if ($Backups) { $selection += 'Backups' }
         if ($Back) { $selection += 'Back' }
         if ($Path) { $selection += 'Path' }
+        if ($Config) { $selection += 'Config' }
         if ($requestedTheme) { $selection += 'Theme' }
 
         if ($selection.Count -gt 1) {
@@ -894,14 +923,18 @@ function SysColor {
             return SysColors -Path $Path -WhatIf:$WhatIf -SkipBackup:$SkipBackup
         }
 
+        if ($Config) {
+            return SysColors-Config -Name $Config -Directory $Directory -WhatIf:$WhatIf
+        }
+
         if ($requestedTheme) {
             return SysColors -Name $requestedTheme -Directory $Directory -WhatIf:$WhatIf -SkipBackup:$SkipBackup
         }
 
-        throw 'Specify a theme switch (for example, -monokai), use -Config <Name>, -Path <File>, or choose an action switch such as -Themes, -Backups, or -Back.'
+        throw 'Specify a theme switch (for example, -monokai), use -Config <Name> to edit a theme, -Path <File>, or choose an action switch such as -Themes, -Backups, or -Back.'
     }
 }
 
 Set-Alias -Name sc -Value SysColor
 
-Export-ModuleMember -Function SysColors, SysColors-List, SysColors-Where, SysColors-Restore, SysColor -Alias sc
+Export-ModuleMember -Function SysColors, SysColors-List, SysColors-Where, SysColors-Config, SysColors-Restore, SysColor -Alias sc
