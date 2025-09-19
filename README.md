@@ -72,5 +72,19 @@ Usage overview:
 5. Restore the most recent backup with `SysColors-Restore -Latest` or list backups
    with `SysColors-Restore -List` before selecting a specific snapshot.
 
+### Quick SysColor helper
+
+The module also exports a compact `SysColor` helper (alias `sc`) that wraps the
+main cmdlets:
+
+- `SysColor -themes` lists available themes (same as `SysColors-List`).
+- `SysColor -backups` shows the saved snapshots (same as `SysColors-Restore -List`).
+- `SysColor -back` restores the most recent snapshot (same as `SysColors-Restore -Latest`).
+- `SysColor -config <Theme>` or a direct switch such as `SysColor -monokai` applies
+  a theme via `SysColors`.
+
+Combine the helper with `-WhatIf` and `-SkipBackup` to forward the options to the
+underlying cmdlets.
+
 Theme files live beside the module in the `themes` folder. Create new themes by
 following the schema shown in `example.yml`.
