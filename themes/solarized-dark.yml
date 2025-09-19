@@ -27,7 +27,7 @@ palette:
 accent:
   color: '#268bd2'
 wallpaper:
-  path: '%USERPROFILE%\\Pictures\\Wallpapers\\solarized-dark.jpg'
+  path: ''
 editors:
   vscode:
     theme: 'Solarized Dark'
@@ -79,7 +79,7 @@ targets:
       export PS1_COLOR_BG="#002B36"
   windows:
     accentColor: '#268BD2'
-    wallpaper: '%USERPROFILE%\\Pictures\\Wallpapers\\solarized-dark.jpg'
+    wallpaper: ''
   vscode:
     theme: 'Solarized Dark'
     colorCustomizations:

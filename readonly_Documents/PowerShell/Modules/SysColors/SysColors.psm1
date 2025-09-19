@@ -592,8 +592,9 @@ function New-SysColorsWindowsAccentStep {
             }
         }
 
-        if ($step.Metadata.Wallpaper) {
-            $path = Expand-SysColorsPath -Path $step.Metadata.Wallpaper
+        $wallpaper = $step.Metadata.Wallpaper
+        if ($null -ne $wallpaper -and -not [string]::IsNullOrWhiteSpace($wallpaper)) {
+            $path = Expand-SysColorsPath -Path $wallpaper
             if (Test-Path -LiteralPath $path) {
                 rundll32.exe user32.dll, UpdatePerUserSystemParameters 1, True
                 Set-ItemProperty -Path 'HKCU:\Control Panel\Desktop' -Name 'Wallpaper' -Value $path -ErrorAction SilentlyContinue

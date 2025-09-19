@@ -27,7 +27,7 @@ palette:
 accent:
   color: '#AE81FF'
 wallpaper:
-  path: '%USERPROFILE%\\Pictures\\Wallpapers\\monokai.jpg'
+  path: ''
 editors:
   vscode:
     theme: 'Monokai Dimmed'
@@ -79,7 +79,7 @@ targets:
       export PS1_COLOR_BG="#272822"
   windows:
     accentColor: '#AE81FF'
-    wallpaper: '%USERPROFILE%\\Pictures\\Wallpapers\\monokai.jpg'
+    wallpaper: ''
   vscode:
     theme: 'Monokai Dimmed'
     colorCustomizations:
