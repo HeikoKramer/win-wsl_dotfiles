@@ -7,8 +7,8 @@
     Copyright         = '(c) Dotfiles. All rights reserved.'
     Description       = 'Applies color themes defined in YAML across Windows, WSL, and editors.'
     PowerShellVersion = '5.1'
-    FunctionsToExport = @('SysColors', 'SysColors-List', 'SysColors-Where', 'SysColors-Restore')
+    FunctionsToExport = @('SysColors', 'SysColors-List', 'SysColors-Where', 'SysColors-Restore', 'SysColor')
     CmdletsToExport   = @()
-    AliasesToExport   = @()
+    AliasesToExport   = @('sc')
     PrivateData       = @{}
 }

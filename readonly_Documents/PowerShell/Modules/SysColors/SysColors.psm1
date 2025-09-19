@@ -807,4 +807,101 @@ function SysColors-Restore {
     return $target
 }
 
-Export-ModuleMember -Function SysColors, SysColors-List, SysColors-Where, SysColors-Restore
+function SysColor {
+    [CmdletBinding()]
+    param(
+        [switch]$Back,
+        [switch]$Themes,
+        [switch]$Backups,
+        [Alias('Config')] [string]$Theme,
+        [string]$Path,
+        [string[]]$Directory,
+        [switch]$SkipBackup,
+        [switch]$WhatIf
+    )
+
+    dynamicparam {
+        $runtimeParameters = [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
+
+        try {
+            $resolvedThemeNames = SysColors-List | Select-Object -ExpandProperty Name -ErrorAction Stop
+        } catch {
+            $resolvedThemeNames = @()
+        }
+
+        Set-Variable -Name 'SysColorDynamicThemeNames' -Value $resolvedThemeNames -Scope 1
+
+        foreach ($themeName in ($resolvedThemeNames | Sort-Object -Unique)) {
+            if (-not $themeName) { continue }
+
+            $attribute = [System.Management.Automation.ParameterAttribute]::new()
+            $attribute.HelpMessage = "Apply the '$themeName' theme."
+
+            $collection = [System.Collections.ObjectModel.Collection[System.Attribute]]::new()
+            $collection.Add($attribute)
+
+            $parameter = [System.Management.Automation.RuntimeDefinedParameter]::new($themeName, [switch], $collection)
+            $runtimeParameters.Add($themeName, $parameter)
+        }
+
+        return $runtimeParameters
+    }
+
+    process {
+        $requestedTheme = $Theme
+
+        $dynamicThemeNamesVariable = Get-Variable -Name 'SysColorDynamicThemeNames' -ErrorAction SilentlyContinue
+        if ($dynamicThemeNamesVariable) {
+            $dynamicThemeNames = $dynamicThemeNamesVariable.Value
+        } else {
+            $dynamicThemeNames = @()
+        }
+
+        foreach ($themeName in $dynamicThemeNames) {
+            if ($PSBoundParameters.ContainsKey($themeName) -and $PSBoundParameters[$themeName]) {
+                if ($requestedTheme -and ($requestedTheme -ne $themeName)) {
+                    throw "Multiple themes were requested ('$requestedTheme' and '$themeName'). Choose a single theme."
+                }
+
+                $requestedTheme = $themeName
+            }
+        }
+
+        $selection = @()
+        if ($Themes) { $selection += 'Themes' }
+        if ($Backups) { $selection += 'Backups' }
+        if ($Back) { $selection += 'Back' }
+        if ($Path) { $selection += 'Path' }
+        if ($requestedTheme) { $selection += 'Theme' }
+
+        if ($selection.Count -gt 1) {
+            throw "Choose a single action. The parameters $($selection -join ', ') cannot be combined."
+        }
+
+        if ($Themes) {
+            return SysColors-List -Directory $Directory
+        }
+
+        if ($Backups) {
+            return SysColors-Restore -List
+        }
+
+        if ($Back) {
+            return SysColors-Restore -Latest -WhatIf:$WhatIf
+        }
+
+        if ($Path) {
+            return SysColors -Path $Path -WhatIf:$WhatIf -SkipBackup:$SkipBackup
+        }
+
+        if ($requestedTheme) {
+            return SysColors -Name $requestedTheme -Directory $Directory -WhatIf:$WhatIf -SkipBackup:$SkipBackup
+        }
+
+        throw 'Specify a theme switch (for example, -monokai), use -Config <Name>, -Path <File>, or choose an action switch such as -Themes, -Backups, or -Back.'
+    }
+}
+
+Set-Alias -Name sc -Value SysColor
+
+Export-ModuleMember -Function SysColors, SysColors-List, SysColors-Where, SysColors-Restore, SysColor -Alias sc
