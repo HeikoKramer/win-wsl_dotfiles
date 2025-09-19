@@ -1,0 +1,108 @@
+name: Dracula
+description: Neon-accented dark theme based on Dracula colors.
+tags:
+  - dark
+  - purple
+mode: dark
+font:
+  family: Cascadia Code PL
+  size: 11
+palette:
+  background: '#282A36'
+  foreground: '#F8F8F2'
+  selection: '#44475A'
+  cursor: '#F8F8F2'
+  black: '#21222C'
+  red: '#FF5555'
+  green: '#50FA7B'
+  yellow: '#F1FA8C'
+  blue: '#6272A4'
+  purple: '#BD93F9'
+  cyan: '#8BE9FD'
+  white: '#F8F8F2'
+  brightBlack: '#4C4D61'
+  brightRed: '#FF6E6E'
+  brightGreen: '#69FF94'
+  brightYellow: '#FFFFA5'
+  brightBlue: '#7AA2F7'
+  brightPurple: '#CFA9FF'
+  brightCyan: '#9AEDFE'
+  brightWhite: '#FFFFFF'
+accent:
+  color: '#BD93F9'
+wallpaper:
+  path: ''
+editors:
+  vscode:
+    theme: 'Dracula Official'
+    cursorColor: '#F8F8F2'
+    selectionBackground: '#44475A'
+  neovim:
+    colorscheme: dracula
+  notepadpp:
+    theme: 'Dracula'
+  helix:
+    theme: dracula
+  sublimeText:
+    theme: 'Dracula.sublime-theme'
+targets:
+  windowsTerminal:
+    scheme:
+      name: Dracula
+      foreground: '#F8F8F2'
+      background: '#282A36'
+      selectionBackground: '#44475A'
+      cursorColor: '#F8F8F2'
+      black: '#21222C'
+      blue: '#6272A4'
+      cyan: '#8BE9FD'
+      green: '#50FA7B'
+      purple: '#BD93F9'
+      red: '#FF5555'
+      white: '#F8F8F2'
+      yellow: '#F1FA8C'
+      brightBlack: '#4C4D61'
+      brightBlue: '#7AA2F7'
+      brightCyan: '#9AEDFE'
+      brightGreen: '#69FF94'
+      brightPurple: '#CFA9FF'
+      brightRed: '#FF6E6E'
+      brightWhite: '#FFFFFF'
+      brightYellow: '#FFFFA5'
+    profileDefaults:
+      colorScheme: Dracula
+  powershell:
+    block: |-
+      # Dracula prompt colors
+      $env:PromptForeground = '#F8F8F2'
+      $env:PromptBackground = '#282A36'
+  bash:
+    block: |-
+      # Dracula prompt colors
+      export PS1_COLOR_FG="#F8F8F2"
+      export PS1_COLOR_BG="#282A36"
+  windows:
+    accentColor: '#BD93F9'
+    wallpaper: ''
+  vscode:
+    theme: 'Dracula Official'
+    colorCustomizations:
+      editor.background: '#282A36'
+      editor.foreground: '#F8F8F2'
+      editor.selectionBackground: '#44475A'
+      terminal.background: '#282A36'
+      terminal.foreground: '#F8F8F2'
+  notepadpp:
+    content: |-
+      <?xml version="1.0" encoding="Windows-1252" ?>
+      <NotepadPlus>
+        <GlobalStyles>
+          <WidgetStyle name="Default Style" fgColor="F8F8F2" bgColor="282A36" />
+          <WidgetStyle name="Selected text colour" fgColor="F8F8F2" bgColor="44475A" />
+        </GlobalStyles>
+      </NotepadPlus>
+  vim:
+    block: |-
+      " Dracula theme integration
+      set background=dark
+      colorscheme dracula
