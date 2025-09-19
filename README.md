@@ -88,7 +88,13 @@ main cmdlets:
 Combine the helper with `-WhatIf` and `-SkipBackup` to forward the options to the
 underlying cmdlets.
 
-Theme files live beside the module in the `themes` folder. Create new themes by
+Theme files live beside the module in the `themes` folder. Current bundled themes include:
+
+- Dracula — neon-accented dark palette inspired by the popular Dracula theme.
+- Monokai — classic dark scheme with warm accents.
+- Solarized Dark — low-contrast dark palette tuned for long sessions.
+
+Create new themes by
 following the schema shown in `example.yml`. Wallpaper entries are optional—leave
 the `wallpaper.path` or `targets.windows.wallpaper` values empty (`''`) to skip
 changing the desktop background when applying a theme.
