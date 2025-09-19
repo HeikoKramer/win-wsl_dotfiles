@@ -44,7 +44,8 @@ targets:
       export EXAMPLE_THEME="Example Theme"
   windows:
     accentColor: '#1E90FF'
-    wallpaper: '%USERPROFILE%\\Pictures\\example.jpg'
+    # Wallpaper path is optional; leave empty to skip updating the desktop background.
+    wallpaper: ''
   vscode:
     theme: Default Dark+
     colorCustomizations:

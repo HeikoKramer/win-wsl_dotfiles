@@ -89,4 +89,6 @@ Combine the helper with `-WhatIf` and `-SkipBackup` to forward the options to th
 underlying cmdlets.
 
 Theme files live beside the module in the `themes` folder. Create new themes by
-following the schema shown in `example.yml`.
+following the schema shown in `example.yml`. Wallpaper entries are optional—leave
+the `wallpaper.path` or `targets.windows.wallpaper` values empty (`''`) to skip
+changing the desktop background when applying a theme.
