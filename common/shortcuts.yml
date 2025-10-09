@@ -103,6 +103,12 @@
   cmd:
     both: 'git status'
 
+- name: timg
+  cat: COMMANDS
+  desc: AI image tool
+  cmd:
+    linux: 'python "${AI_LAB_ROOT}/scripts/generate_image.py"'
+
 - name: lab-on
   cat: PROJECTS
   desc: Activate AI-Lab venv
