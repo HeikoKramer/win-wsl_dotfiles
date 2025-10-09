@@ -56,8 +56,68 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+__dotfiles_supports_truecolor() {
+    if [ -n "${COLORTERM:-}" ]; then
+        case "${COLORTERM}" in
+            *truecolor*|*24bit*)
+                return 0
+                ;;
+        esac
+    fi
+
+    case "${TERM:-}" in
+        *-truecolor|*-direct)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+__dotfiles_hex_to_truecolor_fg() {
+    local hex="${1:-}"
+    hex="${hex#'#'}"
+
+    case "${hex}" in
+        [0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+
+    local r=$((16#${hex:0:2}))
+    local g=$((16#${hex:2:2}))
+    local b=$((16#${hex:4:2}))
+
+    printf '\[\033[38;2;%d;%d;%dm\]' "${r}" "${g}" "${b}"
+}
+
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    prompt_reset='\[\033[0m\]'
+
+    if __dotfiles_supports_truecolor; then
+        prompt_identity='\[\033[38;2;248;248;242m\]'
+        prompt_path='\[\033[38;2;189;147;249m\]'
+
+        if [ -n "${PS1_COLOR_FG:-}" ]; then
+            if prompt_identity_override="$(__dotfiles_hex_to_truecolor_fg "${PS1_COLOR_FG}")"; then
+                prompt_identity="${prompt_identity_override}"
+            fi
+        fi
+
+        prompt_path_source="${PS1_COLOR_PATH:-${PS1_ACCENT_COLOR:-${PS1_COLOR_ACCENT:-${PS1_COLOR_HIGHLIGHT:-}}}}"
+        if [ -n "${prompt_path_source}" ]; then
+            if prompt_path_override="$(__dotfiles_hex_to_truecolor_fg "${prompt_path_source}")"; then
+                prompt_path="${prompt_path_override}"
+            fi
+        fi
+    else
+        prompt_identity='\[\033[38;5;252m\]'
+        prompt_path='\[\033[38;5;183m\]'
+    fi
+
+    PS1="${debian_chroot:+($debian_chroot)}${prompt_identity}\u@\h${prompt_reset}:${prompt_path}\w${prompt_reset}\\$ "
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
