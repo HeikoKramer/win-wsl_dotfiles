@@ -96,3 +96,16 @@
   desc: git status
   cmd:
     both: 'git status'
+
+- name: lab-on
+  cat: COMMANDS
+  desc: Activate AI-Lab venv
+  cmd:
+    win:   'Set-Location -Path "E:\\Projects\\ai-lab"; if (Test-Path ".venv\\Scripts\\Activate.ps1") { . ".venv\\Scripts\\Activate.ps1" } else { Write-Error "Missing virtual environment at .venv" }'
+    linux: 'cd "/mnt/e/Projects/ai-lab" && if [ -f .venv/bin/activate ]; then . .venv/bin/activate; else echo "Missing virtual environment at .venv" >&2; return 1; fi'
+
+- name: lab-off
+  cat: COMMANDS
+  desc: Deactivate AI-Lab venv
+  cmd:
+    both: 'deactivate'
