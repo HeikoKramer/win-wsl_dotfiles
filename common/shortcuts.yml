@@ -83,6 +83,12 @@
     win:   'cd "E:\Projects"; ls'
     linux: 'cd "/mnt/e/Projects"; ls -la'
 
+- name: lab
+  cat: DIRS
+  desc: Open AI-Lab
+  cmd:
+    linux: 'cd "/mnt/e/Projects/ai-lab"; ls -la'
+
 - name: dot
   cat: DIRS
   desc: open dotfiles repo
