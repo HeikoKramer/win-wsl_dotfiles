@@ -107,7 +107,7 @@
   cat: COMMANDS
   desc: AI image tool
   cmd:
-    linux: 'python "${AI_LAB_ROOT}/scripts/generate_image.py"'
+    linux: 'python3 "${AI_LAB_ROOT}/scripts/generate_image.py"'
 
 - name: lab-on
   cat: PROJECTS
