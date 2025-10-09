@@ -221,3 +221,32 @@
             }
         }
     }
+
+- name: tmod
+  cat: AI-LAB
+  desc: Run the AI Lab model smoke test
+  linux: |-
+    if [ -z "${AI_LAB_ROOT:-}" ]; then
+      echo "AI_LAB_ROOT is not set. Export it to your AI Lab repo root." >&2
+      return 1
+    fi
+
+    local script="$AI_LAB_ROOT/scripts/test_model.py"
+    if [ ! -f "$script" ]; then
+      echo "Smoke test script not found at $script" >&2
+      return 1
+    fi
+
+    local python_bin="$AI_LAB_ROOT/.venv/bin/python"
+    if [ -x "$python_bin" ]; then
+      "$python_bin" "$script" "$@"
+    else
+      python3 "$script" "$@"
+    fi
+  win: |-
+    param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Args
+    )
+
+    Write-Host "tmod ist derzeit nur unter WSL/Linux verfügbar. Bitte nutze die WSL-Shell, um den AI Lab Smoke Test auszuführen." -ForegroundColor Yellow

@@ -265,6 +265,13 @@ if [ ! -d "$DOTFILES" ]; then
 fi
 export DOTFILES
 
+# AI Lab root (override before sourcing if your checkout lives elsewhere)
+if [ -z "${AI_LAB_ROOT:-}" ]; then
+  export AI_LAB_ROOT="/mnt/e/Projects/ai-lab"
+else
+  export AI_LAB_ROOT
+fi
+
 # Load generated helper functions (shortcuts, custom functions, etc.)
 generate_shortcut_helpers() {
   local template="$DOTFILES/home/dot_bash_functions.tmpl"

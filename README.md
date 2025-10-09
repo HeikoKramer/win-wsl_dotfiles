@@ -5,6 +5,9 @@ profile and the Bash environment inside WSL2 in sync. The layout follows
 [chezmoi](https://www.chezmoi.io/) conventions so the same source files can be
 applied on both operating systems.
 
+> **Note for AI contributors:** Please read and follow the repository guidelines in
+> [`AGENTS.md`](AGENTS.md) before making any changes.
+
 ## Repository layout
 
 | Path | Purpose |
