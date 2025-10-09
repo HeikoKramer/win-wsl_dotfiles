@@ -134,8 +134,8 @@ esac
 
 # enable color support of ls and also add handy aliases
 
-# Sanfteres Farbschema für ls (bessere Lesbarkeit auf dunklem Hintergrund)
-export LS_COLORS='di=01;35:ln=36:so=32:pi=33:ex=01;32:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=34;43'
+# High-contrast LS colors for better readability on dark backgrounds
+export LS_COLORS='di=01;36:ln=01;35:so=01;33:pi=33:ex=01;32:bd=01;33:cd=01;33:su=30;41:sg=30;46:tw=30;42:ow=34;43'
 
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
