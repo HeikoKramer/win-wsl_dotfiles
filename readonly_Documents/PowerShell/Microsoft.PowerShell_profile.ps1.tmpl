@@ -3,6 +3,7 @@
 $ErrorActionPreference = "Stop"
 Set-Location $HOME
 if (-not $env:DOTFILES) { $env:DOTFILES = "E:\Configs\dotfiles" }
+if (-not $env:AI_LAB_ROOT) { $env:AI_LAB_ROOT = "E:\Projects\ai-lab" }
 # Ensure custom modules are available
 $moduleRoot = Join-Path $env:DOTFILES 'readonly_Documents\PowerShell\Modules'
 if ($moduleRoot -and (Test-Path -LiteralPath $moduleRoot)) {
