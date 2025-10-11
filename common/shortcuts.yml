@@ -127,3 +127,16 @@
   desc: Deactivate AI-Lab venv
   cmd:
     both: 'deactivate'
+
+- name: seed-on
+  cat: PROJECTS
+  desc: Activate Pheno Seed venv
+  cmd:
+    win:   'cd "E:\Projects\pheno-seed"; if (Test-Path ".venv\Scripts\Activate.ps1") { . ".venv\Scripts\Activate.ps1" } else { Write-Error "Missing virtual environment at .venv" }'
+    linux: 'cd "/mnt/e/Projects/pheno-seed" && source .venv/bin/activate'
+
+- name: seed-off
+  cat: PROJECTS
+  desc: Deactivate Pheno Seed venv
+  cmd:
+    both: 'deactivate'
