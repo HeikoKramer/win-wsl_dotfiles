@@ -94,6 +94,35 @@
       echo "Fast-forward merge failed for $remote/$branch. Resolve conflicts and try again." >&2
       return 1
     fi
+
+    if [ -n "${DOTFILES:-}" ] && [ -d "$DOTFILES" ]; then
+      local repo_root dotfiles_root
+      repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+      if [ -n "$repo_root" ]; then
+        if command -v realpath >/dev/null 2>&1; then
+          repo_root="$(realpath "$repo_root" 2>/dev/null || true)"
+          dotfiles_root="$(realpath "$DOTFILES" 2>/dev/null || true)"
+        else
+          repo_root="$(cd "$repo_root" 2>/dev/null && pwd -P)"
+          dotfiles_root="$(cd "$DOTFILES" 2>/dev/null && pwd -P)"
+        fi
+
+        if [ -n "$repo_root" ] && [ -n "$dotfiles_root" ] && [ "$repo_root" = "$dotfiles_root" ]; then
+          if command -v chez >/dev/null 2>&1; then
+            chez
+          elif command -v chezmoi >/dev/null 2>&1; then
+            chezmoi apply -v
+          fi
+
+          if command -v fresh >/dev/null 2>&1; then
+            fresh
+          elif [ -f "$HOME/.bashrc" ]; then
+            # shellcheck disable=SC1090
+            . "$HOME/.bashrc"
+          fi
+        fi
+      fi
+    fi
   win: |-
     param(
         [string]$Remote = 'origin',
@@ -129,6 +158,41 @@
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Fast-forward merge failed for $Remote/$Branch. Resolve conflicts and try again."
         return
+    }
+
+    if ($env:DOTFILES -and (Test-Path -LiteralPath $env:DOTFILES)) {
+        $repoRoot = git rev-parse --show-toplevel 2>$null
+        if ($LASTEXITCODE -eq 0 -and $repoRoot) {
+            try { $repoRoot = (Resolve-Path -LiteralPath $repoRoot).ProviderPath } catch {}
+        } else {
+            $repoRoot = $null
+        }
+
+        $dotfilesRoot = $null
+        try {
+            $dotfilesRoot = (Resolve-Path -LiteralPath $env:DOTFILES).ProviderPath
+        } catch {
+            $dotfilesRoot = $env:DOTFILES
+        }
+
+        if ($repoRoot -and $dotfilesRoot) {
+            $normalizedRepo = $repoRoot.TrimEnd('\')
+            $normalizedDotfiles = $dotfilesRoot.TrimEnd('\')
+
+            if ($normalizedRepo -and $normalizedRepo.Equals($normalizedDotfiles, [System.StringComparison]::OrdinalIgnoreCase)) {
+                if (Get-Command chez -ErrorAction SilentlyContinue) {
+                    try { chez } catch { Write-Warning "chez command failed: $_" }
+                } elseif (Get-Command chezmoi -ErrorAction SilentlyContinue) {
+                    try { chezmoi apply -v } catch { Write-Warning "chezmoi apply failed: $_" }
+                }
+
+                if (Get-Command fresh -ErrorAction SilentlyContinue) {
+                    try { fresh } catch { Write-Warning "fresh command failed: $_" }
+                } elseif (Test-Path -LiteralPath $PROFILE) {
+                    try { . $PROFILE } catch { Write-Warning "Profile reload failed: $_" }
+                }
+            }
+        }
     }
 
 - name: dot
